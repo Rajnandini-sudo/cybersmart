@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CyberSmart Learning Zone</title>
+  <style>
+    body {font-family: 'Segoe UI', sans-serif; background:#f5f7fb; margin:0;}
+    header {background:linear-gradient(90deg,#3b82f6,#2563eb);color:white;padding:15px 25px;display:flex;justify-content:space-between;}
+    .hero{text-align:center;padding:40px 20px;}
+    .hero h1{font-size:2.2em;color:#1e3a8a;}
+    button{background:#3b82f6;color:white;border:none;padding:10px 20px;border-radius:6px;cursor:pointer;}
+    button:hover{background:#2563eb;}
+    .stats{display:flex;justify-content:center;gap:20px;margin:20px;}
+    .card{background:white;padding:15px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,0.1);text-align:center;width:150px;}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin-top:20px;}
+    .unit{background:white;padding:15px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,0.1);}
+    .quiz-container{background:white;padding:20px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,0.1);margin:20px;}
+    .question{margin:10px 0;font-weight:bold;}
+    .answers label{display:block;margin:5px 0;}
+    footer{text-align:center;font-size:0.85em;color:#6b7280;margin:30px 0;}
+  </style>
+</head>
+<body>
+  <header>
+    <h2>CyberSmart</h2>
+    <p>Play smart. Stay safe online.</p>
+    <span class="zone">Student Learning Zone - Demo</span>
+  </header>
+  <section class="hero">
+    <h3>Your Digital Superpower</h3>
+    <h1>Be clever.<br>Be kind.<br>Be cyber-safe.</h1>
+    <p>Learn how to spot scams, protect your privacy, create stronger passwords, and make kinder choices online — one small challenge at a time.</p>
+    <button onclick="alert('Welcome to CyberSmart! Choose a unit to begin learning.')">Start learning!</button>
+  </section>
+  <section class="stats">
+    <div class="card">⭐ Points earned<br><strong id="points">0</strong></div>
+    <div class="card">📘 Lessons completed<br><strong id="lessons">0 / 6</strong></div>
+    <div class="card">🧠 Safety level<br><strong id="level">Rookie 🐣</strong></div>
+  </section>
+  <section class="academy">
+    <h2>Cyber Safety Academy</h2>
+    <p>6 units · 6 multiple-choice questions each · 36 questions total. Choose a unit to begin.</p>
+    <div class="grid">
+      <div class="unit"><h3>🔒 Password Power</h3><button onclick="startQuiz('password')">Practise</button></div>
+      <div class="unit"><h3>🎣 Spot the Phish</h3><button onclick="startQuiz('phish')">Practise</button></div>
+      <div class="unit"><h3>🛡️ Privacy Shield</h3><button onclick="startQuiz('privacy')">Practise</button></div>
+      <div class="unit"><h3>💚 Be Kind Online</h3><button onclick="startQuiz('kind')">Practise</button></div>
+      <div class="unit"><h3>🧩 Download Defenders</h3><button onclick="startQuiz('download')">Practise</button></div>
+      <div class="unit"><h3>🤖 AI Reality Check</h3><button onclick="startQuiz('ai')">Practise</button></div>
+    </div>
+  </section>
+  <section id="quizArea"></section>
+  <footer>
+    <p>CyberSmart is an educational demo. It does not send data to a server. If something online worries you, talk to a trusted adult or teacher.</p>
+  </footer>
+
+<script>
+const quizzes = {
+  password: [
+    {q:"Which is safest?",a:{A:"123456",B:"Your name",C:"Mix of letters/numbers/symbols"},c:"C"},
+    {q:"Should you reuse passwords?",a:{A:"Yes",B:"No"},c:"B"},
+    {q:"What’s a password manager?",a:{A:"Tool to store passwords",B:"A game"},c:"A"},
+    {q:"Best length for a password?",a:{A:"4 chars",B:"8+ chars"},c:"B"},
+    {q:"Should you share passwords?",a:{A:"Yes",B:"No"},c:"B"},
+    {q:"Two-factor authentication adds?",a:{A:"Extra security",B:"Nothing"},c:"A"}
+  ],
+  phish: [
+    {q:"Email says 'You won a free phone!' What do you do?",a:{A:"Click link",B:"Ignore/report"},c:"B"},
+    {q:"Phishing often asks for?",a:{A:"Personal info",B:"Homework"},c:"A"},
+    {q:"Suspicious link should be?",a:{A:"Clicked",B:"Avoided"},c:"B"},
+    {q:"Phishing messages often have?",a:{A:"Spelling errors",B:"Perfect grammar"},c:"A"},
+    {q:"Fake websites may look?",a:{A:"Identical to real ones",B:"Always ugly"},c:"A"},
+    {q:"If unsure about email?",a:{A:"Verify with sender",B:"Reply immediately"},c:"A"}
+  ],
+  privacy: [
+    {q:"Game asks for your address. What do you do?",a:{A:"Share it",B:"Don't share"},c:"B"},
+    {q:"Best way to protect privacy?",a:{A:"Strong passwords",B:"Posting everything online"},c:"A"},
+    {q:"Social media privacy settings?",a:{A:"Should be checked",B:"Ignore"},c:"A"},
+    {q:"Sharing location online is?",a:{A:"Risky",B:"Safe"},c:"A"},
+    {q:"Personal info includes?",a:{A:"Name, address, phone",B:"Favorite color"},c:"A"},
+    {q:"Cookies track?",a:{A:"Browsing activity",B:"Your homework"},c:"A"}
+  ],
+  kind: [
+    {q:"Someone posts cruel comment. What do you do?",a:{A:"Join in",B:"Support victim/report"},c:"B"},
+    {q:"Cyberbullying should be?",a:{A:"Ignored",B:"Reported"},c:"B"},
+    {q:"Kindness online means?",a:{A:"Respectful comments",B:"Insults"},c:"A"},
+    {q:"If bullied online?",a:{A:"Tell trusted adult",B:"Stay silent"},c:"A"},
+    {q:"Good digital citizen?",a:{A:"Helps others",B:"Spreads hate"},c:"A"},
+    {q:"Responding to trolls?",a:{A:"Don’t engage",B:"Fight back"},c:"A"}
+  ],
+  download: [
+    {q:"Pop-up says 'Device infected'. What do you do?",a:{A:"Download random tool",B:"Ignore/report"},c:"B"},
+    {q:"Safe downloads come from?",a:{A:"Official stores",B:"Unknown sites"},c:"A"},
+    {q:"Malware can be hidden in?",a:{A:"Attachments",B:"Homework"},c:"A"},
+    {q:"Pirated software is?",a:{A:"Risky",B:"Safe"},c:"A"},
+    {q:"Before installing apps?",a:{A:"Check reviews/permissions",B:"Install blindly"},c:"A"},
+    {q:"Antivirus helps?",a:{A:"Protect device",B:"Nothing"},c:"A"}
+  ],
+  ai: [
+    {q:"AI image looks real. What should you remember?",a:{A:"It may be fake",B:"Always real"},c:"A"},
+    {q:"AI text should be?",a:{A:"Verified",B:"Trusted blindly"},c:"A"},
+    {q:"Deepfakes are?",a:{A:"Fake videos/images",B:"Always true"},c:"A"},
+    {q:"AI chatbots may?",a:{A:"Give wrong info",B:"Always correct"},c:"A"},
+    {q:"Best way to check AI info?",a:{A:"Cross-check sources",B:"Believe instantly"},c:"A"},
+ ]
+};
+
+let points=0, lessons=0;
+
+function startQuiz(unit){
+  const quiz=quizzes[unit];
+  let html=`<div class="quiz-container"><h2>${unit.toUpperCase()} Quiz</h2>`;
+  quiz.forEach((item,i)=>{
+    html+=`<div class="question">${item.q}</div><div class="answers">`;
+    for(let key in item.a){
+      html+=`<label><input type="radio" name="q${i}" value="${key}">${key}: ${item.a[key]}</label>`;
+    }
+    html+="</div>";
+  });
+  html+=`<button onclick="submitQuiz('${unit}')">Submit</button></div>`;
+  document.getElementById("quizArea").innerHTML=html;
+}
+
+function submitQuiz(unit){
+  const quiz=quizzes[unit];
+  let score=0;
+  quiz.forEach((item,i)=>{
+    const ans=document.querySelector(`input[name=q${i}]:checked`);
+    if(ans && ans.value===item.c){score++;}
+  });
+  points+=score*10;
+  lessons++;
+  document.getElementById("points").innerText=points;
+  document.getElementById("lessons").innerText=`${lessons} / 6`;
+  document.getElementById("quizArea").innerHTML=`<div class="quiz-container"><h2>${unit.toUpperCase()} Results</h2><p>You scored ${score} / ${quiz.length}</p></div>`;
+  if(lessons===6){document.getElementById("level").innerText="Cyber Hero 🦸";}
+}
+</script>
+</body>
+</html>
